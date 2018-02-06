@@ -1,9 +1,17 @@
-<p id="notice"><%= notice %></p>
+<div id="content">
+  <div id="popular">
+    <h3>is <span class="site"><%= @site.url %></span></h3>
+  </div>
+  <h3>the stats</h3>
+    <table id="stat">
+      
+      <%  require 'rubygems'
+          require 'nokogiri'
+          require 'open-uri'
 
-<p>
-  <strong>Url:</strong>
-  <%= @site.url %>
-</p>
-
-<%= link_to 'Edit', edit_site_path(@site) %> |
-<%= link_to 'Back', sites_path %>
+      html_source = @site.url
+      doc = Nokogiri::HTML(open(html_source))
+      puts doc.xpath(".//@href") %>
+	</table>
+</div>
+<p class="links"><%= link_to "back", root_path %></p>

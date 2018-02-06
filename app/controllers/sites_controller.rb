@@ -1,15 +1,11 @@
 class SitesController < ApplicationController
   before_action :set_site, only: [:show, :edit, :update, :destroy]
 
-  # GET /sites
-  # GET /sites.json
-  def index
-    @sites = Site.all
-  end
 
   # GET /sites/1
   # GET /sites/1.json
   def show
+    @site = Site.find(params[:id])
   end
 
   # GET /sites/new
@@ -17,48 +13,43 @@ class SitesController < ApplicationController
     @site = Site.new
   end
 
-  # GET /sites/1/edit
-  def edit
-  end
 
   # POST /sites
   # POST /sites.json
   def create
-    @site = Site.new(site_params)
-
-    respond_to do |format|
+    require 'open-uri'
+    @site = Site.find_or_initialize_by(site_params)
       if @site.save
-        format.html { redirect_to @site, notice: 'Site was successfully created.' }
-        format.json { render :show, status: :created, location: @site }
+        #render text: @site
+        redirect_to site_path(@site)
       else
-        format.html { render :new }
-        format.json { render json: @site.errors, status: :unprocessable_entity }
+        redirect_to :back, :flash => {:error => @site.errors[:url]}
       end
-    end
   end
 
-  # PATCH/PUT /sites/1
-  # PATCH/PUT /sites/1.json
-  def update
-    respond_to do |format|
-      if @site.update(site_params)
-        format.html { redirect_to @site, notice: 'Site was successfully updated.' }
-        format.json { render :show, status: :ok, location: @site }
-      else
-        format.html { render :edit }
-        format.json { render json: @site.errors, status: :unprocessable_entity }
-      end
+  # Define the Entry object
+  class Entry
+    def initialize(title, link)
+      @title = title
+      @link = link
     end
+    attr_reader :title
+    attr_reader :link
   end
 
-  # DELETE /sites/1
-  # DELETE /sites/1.json
-  def destroy
-    @site.destroy
-    respond_to do |format|
-      format.html { redirect_to sites_url, notice: 'Site was successfully destroyed.' }
-      format.json { head :no_content }
+  def scrape_web
+    require 'open-uri'
+    doc = Nokogiri::HTML(open("https://google.com/"))
+
+    entries = doc.css('.entry')
+    @entriesArray = []
+    entries.each do |entry|
+      title = entry.css('p.title>a').text
+      link = entry.css('p.title>a')[0]['href']
+      @entriesArray << Entry.new(title, link)
     end
+
+    render template: 'sites/scrape_web'
   end
 
   private

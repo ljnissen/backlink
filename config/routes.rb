@@ -1,5 +1,8 @@
 Rails.application.routes.draw do
+  resources :stats
   resources :sites
+  get 'scrape_web' => 'sites#scrape_web'
+  root 'sites#new'
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

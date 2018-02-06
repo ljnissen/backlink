@@ -11,12 +11,24 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180204151214) do
+ActiveRecord::Schema.define(version: 20180204170945) do
 
   create_table "sites", force: :cascade do |t|
     t.string   "url"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
+
+  create_table "stats", force: :cascade do |t|
+    t.string   "service"
+    t.string   "kind"
+    t.integer  "value"
+    t.integer  "popularity"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer  "site_id"
+  end
+
+  add_index "stats", ["site_id"], name: "index_stats_on_site_id"
 
 end

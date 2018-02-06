@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  service: MyString
+  kind: MyString
+  value: 1
+  popularity: 1
+
+two:
+  service: MyString
+  kind: MyString
+  value: 1
+  popularity: 1

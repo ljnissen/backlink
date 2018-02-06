@@ -1,5 +1,7 @@
-<h1>New Site</h1>
-
-<%= render 'form' %>
-
-<%= link_to 'Back', sites_path %>
+<%= form_for @site, :url => sites_path do |f| %>
+	<p id="label"><%= f.label :site, "Enter a site" %></p>
+	<p id="input">
+		<%= f.text_field :url %>
+		<%= f.submit "Enter", :id => 'site_submit' %>
+	</p>
+<% end %>
